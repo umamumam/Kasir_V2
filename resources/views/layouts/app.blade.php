@@ -1,176 +1,82 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+
+<html lang="en" class="light-style layout-menu-fixed layout-compact" dir="ltr" data-theme="theme-default"
+    data-assets-path="../assets/" data-template="vertical-menu-template-free" data-style="light">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kasir App</title>
-    <!-- Menggunakan Bootstrap CDN untuk styling -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" defer></script>
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-    <style>
-        /* Styling tambahan untuk header dan navbar */
-        .navbar {
-            background-color: #3498db;
-            border-radius: 0 0 10px 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
+    <meta charset="utf-8" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-        .navbar-brand {
-            font-weight: bold;
-            color: #ffffff !important;
-            margin-left: 30px;
-            font-size: 24px;
-        }
+    <title>Dashboard - Analytics | Materio - Bootstrap Material Design Admin Template</title>
 
-        .navbar-nav .nav-link {
-            color: #ffffff !important;
-            font-size: 16px;
-            padding: 12px 18px;
-            margin-right: 30px;
-            transition: color 0.3s ease-in-out;
-        }
+    <meta name="description" content="" />
+    <link rel="icon" type="image/x-icon" href="{{ asset('materio/assets/img/favicon/favicon.ico') }}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&ampdisplay=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="{{ asset('materio/assets/vendor/fonts/remixicon/remixicon.css') }}" />
+    <link rel="stylesheet" href="{{ asset('materio/assets/vendor/libs/node-waves/node-waves.css') }}" />
+    <link rel="stylesheet" href="{{ asset('materio/assets/vendor/css/core.css') }}" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="{{ asset('materio/assets/vendor/css/theme-default.css') }}" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="{{ asset('materio/assets/css/demo.css') }}" />    
+    <link rel="stylesheet" href="{{ asset('materio/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
+    <link rel="stylesheet" href="{{ asset('materio/assets/vendor/libs/apex-charts/apex-charts.css') }}" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">    
+    <script src="{{ asset('materio/assets/vendor/js/helpers.js') }}"></script>
+    <script src="{{ asset('materio/assets/js/config.js') }}"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-        .navbar-nav .nav-link:hover {
-            color: #f8f9fa !important;
-            background-color: #2980b9;
-            border-radius: 5px;
-        }
-
-        .container {
-            background-color: #f5f5f5;
-            border-radius: 10px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            margin-top: 40px;
-        }
-
-        .alert {
-            margin-bottom: 20px;
-            border-radius: 8px;
-        }
-
-        .content-header {
-            margin-bottom: 30px;
-            font-weight: bold;
-            color: #333;
-            font-size: 28px;
-            letter-spacing: 1px;
-        }
-
-        /* Animasi untuk alert */
-        .alert-success {
-            animation: fadeIn 1s ease-out;
-        }
-
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-            }
-            100% {
-                opacity: 1;
-            }
-        }
-
-        /* Styling untuk tombol close alert */
-        .btn-close {
-            background-color: #3498db;
-            border-radius: 50%;
-            opacity: 0.8;
-        }
-
-        .btn-close:hover {
-            opacity: 1;
-            background-color: #2980b9;
-        }
-
-        /* Efek Hover untuk Navbar */
-        .navbar-toggler-icon {
-            background-color: #ffffff;
-        }
-
-        /* Responsif */
-        @media (max-width: 768px) {
-            .navbar-brand {
-                font-size: 20px;
-            }
-
-            .navbar-nav .nav-link {
-                font-size: 14px;
-                padding: 10px;
-            }
-        }
-    </style>
 </head>
+
 <body>
-    <!-- Menggunakan container-fluid untuk navbar agar memenuhi seluruh lebar layar -->
-    <nav class="navbar navbar-expand-lg navbar-light w-100">
-        <a class="navbar-brand" href="{{ url('/transaksi') }}">Kasir App</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                @if(Auth::check()) <!-- Cek jika pengguna sudah login -->
-                    @if(Auth::user()->role == 'admin')
-                        <!-- Menu untuk Admin -->
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('dashboard.index') }}">Dashboard</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('users.index') }}">Manajemen User</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('menus.index') }}">Manajemen Menu</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('penerimaan.index') }}">Penerimaan Barang</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('kategori.index') }}">Kategori</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('produk.index') }}">Produk</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('logs.index') }}">Log Riwayat</a>
-                        </li>
-                    @elseif(Auth::user()->role == 'kasir')
-                        <!-- Menu untuk Kasir -->
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('transaksi.index') }}">Transaksi</a>
-                        </li>
-                    @endif
-                    <!-- Tombol Logout -->
-                    <li class="nav-item">
-                        <form action="{{ url('logout') }}" method="POST" class="d-inline">
-                            @csrf
-                            <button type="submit" class="nav-link btn btn-link">Logout</button>
-                        </form>
-                    </li>
-                @else
-                    <!-- Jika pengguna belum login -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('login') }}">Login</a>
-                    </li>
-                @endif
-            </ul>
-        </div>
-    </nav>
-    
+    <div class="layout-wrapper layout-content-navbar">
+        <div class="layout-container">
+            @include('layouts.sidebar')
+            <!-- / Menu -->
 
-    <div class="container mt-4">
-        <!-- Menampilkan pesan sukses -->
-        @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <strong>Berhasil!</strong> {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <!-- Layout container -->
+            <div class="layout-page">
+                <!-- Navbar -->
+                @include('layouts.navbar')
+
+
+                <!-- / Navbar -->
+
+                <!-- Content wrapper -->
+                <div class="content-wrapper">
+                    <!-- Content -->
+                    @yield('content')
+
+                    <!-- / Content -->
+
+                    <!-- Footer -->
+                    @include('layouts.footer')
+
+                    <!-- / Footer -->
+
+                    <div class="content-backdrop fade"></div>
+                </div>
+                <!-- Content wrapper -->
             </div>
-        @endif
+            <!-- / Layout page -->
+        </div>
 
-        <!-- Menampilkan konten halaman yang dinamis -->
-        @yield('content')
-
+        <!-- Overlay -->
+        <div class="layout-overlay layout-menu-toggle"></div>
     </div>
+    <script src="{{ asset('materio/assets/vendor/libs/jquery/jquery.js') }}"></script>
+    <script src="{{ asset('materio/assets/vendor/libs/popper/popper.js') }}"></script>
+    <script src="{{ asset('materio/assets/vendor/js/bootstrap.js') }}"></script>
+    <script src="{{ asset('materio/assets/vendor/libs/node-waves/node-waves.js') }}"></script>
+    <script src="{{ asset('materio/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
+    <script src="{{ asset('materio/assets/vendor/js/menu.js') }}"></script>
+    <script src="{{ asset('materio/assets/vendor/libs/apex-charts/apexcharts.js') }}"></script>
+    <script src="{{ asset('materio/assets/js/main.js') }}"></script>
+    <script src="{{ asset('materio/assets/js/dashboards-analytics.js') }}"></script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
 </body>
+
 </html>
