@@ -97,8 +97,8 @@
                     <div class="card-body mt-1">
                         <h4 class="mb-1">Register Akun 🚀</h4>
                         <p class="mb-5">Make your app management easy and fun!</p>
-                    
-                        <form id="formAuthentication" class="mb-5" action="{{ route('register') }}" method="POST">
+                        
+                        <form id="formAuthentication" class="mb-5" action="{{ url('register') }}" method="POST">
                             @csrf
                             
                             <div class="form-floating form-floating-outline mb-5">
@@ -147,7 +147,7 @@
                     
                         <p class="text-center mb-5">
                             <span>Already have an account?</span>
-                            <a href="{{ route('login') }}"> 
+                            <a href="{{ url('login') }}">
                                 <span>Sign in instead</span>
                             </a>
                         </p>

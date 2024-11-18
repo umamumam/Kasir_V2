@@ -98,7 +98,7 @@
                         <h4 class="mb-1">Welcome to RSUD KESESI ! 👋🏻</h4>
                         <p class="mb-5">Please log-in to your account</p>
                     
-                        <form id="formAuthentication" class="mb-5" action="{{ route('login') }}" method="POST">
+                        <form id="formAuthentication" class="mb-5" action="{{ url('login') }}" method="POST">
                             @csrf
                             <div class="form-floating form-floating-outline mb-5">
                                 <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" autofocus required />
@@ -134,7 +134,7 @@
                     
                         <p class="text-center mb-5">
                             <span>New on our platform?</span>
-                            <a href="{{ route('register') }}">
+                            <a href="{{ url('register') }}">
                                 <span>Create an account</span>
                             </a>
                         </p>
