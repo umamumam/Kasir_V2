@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Carbon\Carbon;
 use App\Models\Produk;
+use App\Models\Kategori;
+use App\Models\Supliyer;
 use App\Models\Transaksi;
 use App\Models\Penerimaan;
-use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -14,8 +17,8 @@ class DashboardController extends Controller
     {
         // Total produk
         $totalProduk = Produk::count();
-
-        // Pendapatan harian
+        $totalSupliyer = Supliyer::count();
+        $totalKategori = Kategori::count();
         $pendapatanHarian = Transaksi::whereDate('tanggaltransaksi', Carbon::today())
             ->sum('total');
 
@@ -72,8 +75,10 @@ class DashboardController extends Controller
             'laporan',
             'start',
             'end',
-            'tanggal',  // Mengirimkan tanggal untuk grafik
-            'penjualan'
+            'tanggal',  
+            'penjualan',
+            'totalSupliyer',
+            'totalKategori'
         ));
     }
 }

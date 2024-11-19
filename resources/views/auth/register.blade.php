@@ -60,7 +60,7 @@
                         <a href="index.html" class="app-brand-link gap-3">
                             <span class="app-brand-logo demo">
                                 <span style="color: var(--bs-primary)">
-                                    <img src="{{ asset('logo_lab.png') }}" alt="Logo Lab" width="80" height="60">
+                                    <img src="{{ asset('logok.png') }}" alt="Logo Lab" width="250" height="80">
                                         <path fill-rule="evenodd" clip-rule="evenodd"
                                             d="M12.3002 1.25469L56.655 28.6432C59.0349 30.1128 60.4839 32.711 60.4839 35.5089V160.63C60.4839 163.468 58.9941 166.097 56.5603 167.553L12.2055 194.107C8.3836 196.395 3.43136 195.15 1.14435 191.327C0.395485 190.075 0 188.643 0 187.184V8.12039C0 3.66447 3.61061 0.0522461 8.06452 0.0522461C9.56056 0.0522461 11.0271 0.468577 12.3002 1.25469Z"
                                             fill="currentColor" />
@@ -98,51 +98,57 @@
                         <h4 class="mb-1">Register Akun 🚀</h4>
                         <p class="mb-5">Make your app management easy and fun!</p>
                         
-                        <form id="formAuthentication" class="mb-5" action="{{ url('register') }}" method="POST">
+                        <form id="formAuthentication" action="{{ url('register') }}" method="POST">
                             @csrf
-                            
+                        
                             <div class="form-floating form-floating-outline mb-5">
                                 <input type="text" class="form-control" id="name" name="name" required placeholder=" " autofocus />
-                                <label for="name">Name</label> 
+                                <label for="name">Name</label>
                             </div>
-                            
+                        
                             <div class="form-floating form-floating-outline mb-5">
                                 <input type="email" class="form-control" id="email" name="email" required placeholder=" " />
                                 <label for="email">Email</label>
                             </div>
-                            
+                        
                             <div class="mb-5 form-password-toggle">
                                 <div class="input-group input-group-merge">
                                     <div class="form-floating form-floating-outline">
-                                        <input type="password" id="password" class="form-control" name="password"
-                                            placeholder=" " required />
+                                        <input type="password" id="password" class="form-control" name="password" required placeholder=" " />
                                         <label for="password">Password</label>
                                     </div>
                                     <span class="input-group-text cursor-pointer"><i class="ri-eye-off-line ri-20px"></i></span>
                                 </div>
                             </div>
-                    
+                        
                             <div class="mb-5 form-password-toggle">
                                 <div class="input-group input-group-merge">
                                     <div class="form-floating form-floating-outline">
                                         <input type="password" id="password_confirmation" class="form-control" name="password_confirmation"
-                                            placeholder=" " required />
+                                            required placeholder=" " />
                                         <label for="password_confirmation">Confirm Password</label>
                                     </div>
                                     <span class="input-group-text cursor-pointer"><i class="ri-eye-off-line ri-20px"></i></span>
                                 </div>
                             </div>
-                    
+                        
+                            <div class="mb-5">
+                                <label for="role">Role</label>
+                                <select id="role" name="role" class="form-select" required>
+                                    <option value="" disabled selected>Pilih Role</option>
+                                    <option value="admin">Admin</option>
+                                    <option value="kasir">Kasir</option>
+                                </select>
+                            </div>
+                        
                             <div class="mb-5 py-2">
                                 <div class="form-check mb-0">
                                     <input class="form-check-input" type="checkbox" id="terms-conditions" name="terms" required />
-                                    <label class="form-check-label" for="terms-conditions">
-                                        I agree to <a href="javascript:void(0);">privacy policy & terms</a>
-                                    </label>
+                                    <label class="form-check-label" for="terms-conditions">I agree to the terms and conditions</label>
                                 </div>
                             </div>
-                            
-                            <button class="btn btn-primary d-grid w-100 mb-5" type="submit">Register</button> 
+                        
+                            <button type="submit" class="btn btn-primary w-100">Register</button>
                         </form>
                     
                         <p class="text-center mb-5">

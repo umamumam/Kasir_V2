@@ -7,30 +7,85 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 30px;
+            margin: 0;
+            padding: 0;
+            width: 250px; 
+            font-size: 12px;
+            color: #000; 
         }
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .table th, .table td {
-            border: 1px solid #000;
-            padding: 8px;
-            text-align: left;
-        }
-        .table th {
-            background-color: #f2f2f2;
-        }
+
         .text-center {
             text-align: center;
         }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .table th, .table td {
+            padding: 3px;
+            text-align: left;
+            font-size: 10px;
+        }
+
+        .table th {
+            font-weight: bold;
+            text-align: center;
+            border-top: 1px solid #000; /* Garis di atas tabel */
+        }
+
+        .table td {
+            text-align: center;
+            border: none; /* Menghilangkan garis dalam tabel */
+        }
+
+        .table tr:last-child td {
+            border-bottom: 1px solid #000; /* Garis di bawah tabel pada baris terakhir */
+        }
+
+        .total, .bayar, .kembalian {
+            font-weight: bold;
+            font-size: 10px;
+        }
+
+        .footer {
+            margin-top: 5px;
+            font-size: 10px;
+            text-align: center;
+            padding-top: 10px;
+            border-top: 1px solid #000; /* Garis di atas footer */
+        }
+
+        .header {
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            margin: 2px 0;
+            font-size: 10px;
+        }
+
+        .line {
+            border-top: 1px solid #000; 
+            margin: 10px 0;
+        }
+
+        .store-name {
+            font-size: 12px;
+            font-weight: bold;
+        }
+
     </style>
 </head>
 <body>
     <div class="text-center">
-        <h2>KUITANSI</h2>
-        <p><strong>Nomor Transaksi:</strong> {{ $transaksi->kode }}</p>
-        <p><strong>Tanggal:</strong> {{ $transaksi->tanggaltransaksi }}</p>
+        <div class="store-name">Toko ABC</div> 
+        <br>
+        <label><strong>No:</strong> {{ $transaksi->kode }}</label><br>
+        <label><strong>Tanggal:</strong> {{ \Carbon\Carbon::parse($transaksi->tanggaltransaksi)->format('d-m-Y') }}</label>
+        <div class="line"></div> 
     </div>
 
     <table class="table">
@@ -38,7 +93,7 @@
             <tr>
                 <th>Produk</th>
                 <th>Harga</th>
-                <th>Jumlah</th>
+                <th>Qty</th>
                 <th>Subtotal</th>
             </tr>
         </thead>
@@ -46,21 +101,25 @@
             @foreach($transaksi->detailTransaksi as $detail)
                 <tr>
                     <td>{{ $detail->produk->nama }}</td>
-                    <td>{{ number_format($detail->harga, 2) }}</td>
+                    <td>{{ number_format($detail->harga, 0) }}</td>
                     <td>{{ $detail->jumlah }}</td>
-                    <td>{{ number_format($detail->subtotal, 2) }}</td>
+                    <td>{{ number_format($detail->subtotal, 0) }}</td>
                 </tr>
             @endforeach
         </tbody>
     </table>
 
-    <div>
-        <p><strong>Total: </strong>{{ number_format($transaksi->total, 2) }}</p>
-        <p><strong>Bayar: </strong>{{ number_format($transaksi->bayar, 2) }}</p>
-        <p><strong>Kembalian: </strong>{{ number_format($transaksi->kembalian, 2) }}</p>
+    <div class="total">
+        <label><strong>Total:</strong> {{ number_format($transaksi->total, 0) }}</label>
+    </div>
+    <div class="bayar">
+        <label><strong>Bayar:</strong> {{ number_format($transaksi->bayar, 0) }}</label>
+    </div>
+    <div class="kembalian">
+        <label><strong>Kembalian:</strong> {{ number_format($transaksi->kembalian, 0) }}</label>
     </div>
 
-    <div class="text-center">
+    <div class="footer">
         <p>Terima kasih atas transaksi Anda!</p>
     </div>
 </body>

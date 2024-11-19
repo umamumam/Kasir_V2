@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tanggal dan Jam Sekarang</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+        }
+        .datetime-container {
+            text-align: center;
+            padding: 20px;
+            background: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .date, .time {
+            font-size: 1.5rem;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="datetime-container">
+        <div class="date" id="currentDate">Loading date...</div>
+        <div class="time" id="currentTime">Loading time...</div>
+    </div>
+
+    <script>
+        function updateDateTime() {
+            const now = new Date();
+            const optionsDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const optionsTime = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
+
+            document.getElementById('currentDate').textContent = now.toLocaleDateString('id-ID', optionsDate);
+            document.getElementById('currentTime').textContent = now.toLocaleTimeString('id-ID', optionsTime);
+        }
+
+        // Perbarui setiap detik
+        setInterval(updateDateTime, 1000);
+
+        // Panggilan awal agar tidak ada delay saat load
+        updateDateTime();
+    </script>
+</body>
+</html>

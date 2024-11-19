@@ -71,7 +71,7 @@ id="layout-navbar">
                 </li>
                 <li>
                     <div class="d-grid px-4 pt-2 pb-1">
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        <form id="logout-form" action="{{ url('logout') }}" method="POST" style="display: none;">
                             @csrf
                         </form>
                         <a class="btn btn-danger d-flex" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

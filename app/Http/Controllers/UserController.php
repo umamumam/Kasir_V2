@@ -12,14 +12,19 @@ class UserController extends Controller
     /**
      * Tampilkan daftar pengguna.
      */
-    public function index()
+    public function index(Request $request)
     {
         // Hanya admin yang dapat mengakses halaman ini
         if (Auth::user()->role !== 'admin') {
             abort(403, 'Anda tidak memiliki izin untuk mengakses halaman ini.');
         }
+        $search = $request->input('search');
+        $entries = $request->input('entries', 10);
 
-        $users = User::all();
+        // $users = User::all();
+        $users = User::where('name', 'like', "%$search%")
+        ->orWhere('email', 'like', "%$search%")
+        ->paginate($entries);
         return view('users.index', compact('users'));
     }
 

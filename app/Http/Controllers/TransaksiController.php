@@ -11,14 +11,23 @@ use App\Models\DetailTransaksi;
 
 class TransaksiController extends Controller
 {
-    // Fungsi untuk menampilkan daftar transaksi
-    public function index()
+    public function index(Request $request)
     {
-        $transaksis = Transaksi::all();
+        $tanggal_dari = $request->input('tanggal_dari') ?: now()->toDateString();
+        $tanggal_sampai = $request->input('tanggal_sampai') ?: now()->toDateString();
+        $kode_transaksi = $request->input('kode_transaksi');
+        $transaksis = Transaksi::query();
+        if ($tanggal_dari && $tanggal_sampai) {
+            $transaksis = $transaksis->whereBetween('tanggaltransaksi', [$tanggal_dari, $tanggal_sampai]);
+        }
+        if ($kode_transaksi) {
+            $transaksis = $transaksis->where('kode', 'like', '%' . $kode_transaksi . '%');
+        }
+        $transaksis = $transaksis->paginate(10);
         return view('transaksi.index', compact('transaksis'));
     }
+    
 
-    // Fungsi untuk membuat transaksi baru
     public function create()
     {
         // Ambil data produk
