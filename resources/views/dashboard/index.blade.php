@@ -230,13 +230,15 @@
 
 <!-- Tabel Penerimaan Terbaru -->
 <div class="card shadow-sm mb-4">
-    <div class="card-header d-flex justify-content-between align-items-center">
+    <div class="card-header">
         <h3 class="mb-0">Penerimaan Terbaru</h3>
-        <form class="d-flex" method="GET" action="{{ route('dashboard.index') }}">
-            <input type="text" name="search" class="form-control me-2" placeholder="Cari produk..." 
-                value="{{ request('search') }}">
-            <button type="submit" class="btn btn-outline-primary">Cari</button>
-        </form>
+        <div class="d-flex justify-content-between align-items-center mt-3">
+            <a href="{{ route('dashboard.exportExcel') }}" class="btn btn-success">Export Excel</a>
+            <form class="d-flex" method="GET" action="{{ route('dashboard.index') }}">
+                <input type="text" name="search" class="form-control me-2" placeholder="Cari produk..." value="{{ request('search') }}">
+                <button type="submit" class="btn btn-outline-primary">Cari</button>
+            </form>
+        </div>
     </div>
     <div class="card-body">
         <table class="table table-striped table-bordered">
@@ -272,13 +274,16 @@
 
 <!-- Tabel Laporan Transaksi -->
 <div class="card shadow-sm mb-4">
-    <div class="card-header d-flex justify-content-between align-items-center">
+    <div class="card-header">
         <h3 class="mb-0">Laporan Transaksi</h3>
-        <form class="d-flex" method="GET" action="{{ route('dashboard.index') }}">
-            <input type="text" name="search" class="form-control me-2" placeholder="Cari transaksi..." 
-                value="{{ request('search') }}">
-            <button type="submit" class="btn btn-outline-primary">Cari</button>
-        </form>
+        <div class="d-flex justify-content-between align-items-center mt-3">
+            <a href="{{ route('dashboard.exportLaporanExcel') }}" class="btn btn-success">Export Excel</a>
+            <form class="d-flex ms-2" method="GET" action="{{ route('dashboard.index') }}">
+                <input type="text" name="search" class="form-control me-2" placeholder="Cari transaksi..." 
+                    value="{{ request('search') }}">
+                <button type="submit" class="btn btn-outline-primary">Cari</button>
+            </form>
+        </div>
     </div>
     <div class="card-body">
         <table class="table table-bordered table-striped">

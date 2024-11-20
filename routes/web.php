@@ -47,5 +47,8 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 Route::get('/logs', [LogController::class, 'index'])->name('logs.index');
 Route::get('/transaksi/{transaksi}/print', [TransaksiController::class, 'print'])->name('transaksi.print');
 Route::resource('supliyer', SupliyerController::class);
+Route::get('/dashboard/export-excel', [DashboardController::class, 'exportExcel'])->name('dashboard.exportExcel');
+Route::get('dashboard/export-laporan-excel', [DashboardController::class, 'exportLaporanExcel'])
+    ->name('dashboard.exportLaporanExcel');
 
 

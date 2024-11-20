@@ -11,7 +11,9 @@ class Penerimaan extends Model
 
     protected $table = 'penerimaan'; 
     protected $fillable = ['produk_id', 'jumlah', 'harga_jual', 'tanggal']; 
-
+    protected $casts = [
+        'tanggal' => 'datetime',
+    ];
     public function produk()
     {
         return $this->belongsTo(Produk::class);
