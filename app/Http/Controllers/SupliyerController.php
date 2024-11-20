@@ -9,16 +9,19 @@ class SupliyerController extends Controller
 {
     public function index(Request $request)
     {
-        $search = $request->get('search');
-        $entries = $request->get('entries', 10);  
+        $search = $request->get('search', '');
+        $entries = $request->get('entries', 10);
         $supliyers = Supliyer::when($search, function ($query, $search) {
-            return $query->where('nama', 'like', '%' . $search . '%')
+            $query->where('nama', 'like', '%' . $search . '%')
                 ->orWhere('email', 'like', '%' . $search . '%')
                 ->orWhere('telepon', 'like', '%' . $search . '%')
                 ->orWhere('alamat', 'like', '%' . $search . '%');
-        })
-            ->paginate($entries);
-        return view('supliyer.index', compact('supliyers'));
+        })->paginate($entries);
+        $supliyers->appends([
+            'search' => $search,
+            'entries' => $entries,
+        ]);
+        return view('supliyer.index', compact('supliyers', 'search', 'entries'));
     }
 
 

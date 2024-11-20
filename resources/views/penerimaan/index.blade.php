@@ -66,7 +66,7 @@
                     {{ $penerimaan->total() }} entri</p>
 
                 <div class="pagination-links">
-                    {{ $penerimaan->links() }}
+                    {{ $penerimaan->links('pagination::bootstrap-5') }}
                 </div>
 
                 <form id="entriesForm" action="{{ route('penerimaan.index') }}" method="GET" class="form-container">

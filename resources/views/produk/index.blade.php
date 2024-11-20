@@ -77,7 +77,7 @@
                     {{ $produks->total() }} entri</p>
 
                 <div class="pagination-links">
-                    {{ $produks->links() }}
+                    {{ $produks->links('pagination::bootstrap-5') }}
                 </div>
 
                 <form id="entriesForm" action="{{ route('produk.index') }}" method="GET" class="form-container">

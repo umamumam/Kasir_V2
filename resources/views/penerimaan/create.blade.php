@@ -49,34 +49,85 @@
     </div>
 </div>
 
+<!-- Modal Popup untuk Pilih Produk -->
+<div class="modal fade" id="produkModal" tabindex="-1" aria-labelledby="produkModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="produkModalLabel">Pilih Produk</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="search-produk" class="form-control mb-3" placeholder="Cari produk..." oninput="filterProduk()">
+                <div id="produk-list">
+                    @foreach ($produks as $produk)
+                        <div class="product-item" data-id="{{ $produk->id }}" data-harga="{{ $produk->harga_jual }}">
+                            <p>{{ $produk->nama }} - Rp {{ number_format($produk->harga_jual, 2, ',', '.') }}</p>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
+    // Show modal when add product button is clicked
     document.getElementById('addRow').addEventListener('click', function () {
-        let tableBody = document.querySelector('#produkTable tbody');
-        let row = `
-            <tr>
-                <td>
-                    <select name="produk_id[]" class="form-control produk-select" required>
-                        <option value="">Pilih Produk</option>
-                        @foreach ($produks as $produk)
-                            <option value="{{ $produk->id }}" data-harga="{{ $produk->harga_jual }}">{{ $produk->nama }} (Stok: {{ $produk->stok }})</option>
-                        @endforeach
-                    </select>
-                </td>
-                <td><input type="number" name="jumlah[]" class="form-control" required min="1"></td>
-                <td><input type="number" name="harga_jual[]" class="form-control harga-jual" required min="0" readonly></td>
-                <td><input type="date" name="tanggal[]" class="form-control tanggal" value="{{ date('Y-m-d') }}" required></td>
-                <td><button type="button" class="btn btn-danger remove-row"><i class="fas fa-trash-alt"></i> Hapus</button></td>
-            </tr>
-        `;
-        tableBody.insertAdjacentHTML('beforeend', row);
+        var produkModal = new bootstrap.Modal(document.getElementById('produkModal'));
+        produkModal.show();
     });
 
+    // Filter produk list based on search input
+    function filterProduk() {
+        var query = document.getElementById('search-produk').value.toLowerCase();
+        var produkItems = document.querySelectorAll('.product-item');
+        
+        produkItems.forEach(function(item) {
+            var productName = item.querySelector('p').textContent.toLowerCase();
+            if (productName.includes(query)) {
+                item.style.display = '';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
+
+    // Add selected product to the table
+    document.querySelectorAll('.product-item').forEach(function(item) {
+        item.addEventListener('click', function () {
+            var productId = item.getAttribute('data-id');
+            var productPrice = item.getAttribute('data-harga');
+            var productName = item.querySelector('p').textContent;
+
+            let tableBody = document.querySelector('#produkTable tbody');
+            let newRow = `
+                <tr>
+                    <td>
+                        <select name="produk_id[]" class="form-control produk-select" required>
+                            <option value="${productId}" data-harga="${productPrice}">${productName}</option>
+                        </select>
+                    </td>
+                    <td><input type="number" name="jumlah[]" class="form-control" required min="1"></td>
+                    <td><input type="number" name="harga_jual[]" class="form-control harga-jual" value="${productPrice}" readonly></td>
+                    <td><input type="date" name="tanggal[]" class="form-control tanggal" value="{{ date('Y-m-d') }}" required></td>
+                    <td><button type="button" class="btn btn-danger remove-row"><i class="fas fa-trash-alt"></i> Hapus</button></td>
+                </tr>
+            `;
+            tableBody.insertAdjacentHTML('beforeend', newRow);
+            var produkModal = bootstrap.Modal.getInstance(document.getElementById('produkModal'));
+            produkModal.hide();
+        });
+    });
+
+    // Remove row when delete button is clicked
     document.addEventListener('click', function (e) {
         if (e.target && e.target.classList.contains('remove-row')) {
             e.target.closest('tr').remove();
         }
     });
 
+    // Update harga jual based on selected product
     document.addEventListener('change', function (e) {
         if (e.target && e.target.classList.contains('produk-select')) {
             let selectedOption = e.target.options[e.target.selectedIndex];
@@ -87,48 +138,3 @@
 </script>
 
 @endsection
-
-<style>
-    .table th, .table td {
-        vertical-align: middle;
-    }
-
-    .table-responsive {
-        margin-bottom: 20px;
-    }
-
-    .remove-row {
-        width: 100%;
-        text-align: center;
-        font-size: 14px;
-    }
-
-    .form-control {
-        font-size: 14px;
-    }
-
-    .btn {
-        font-size: 14px;
-        padding: 10px 15px;
-    }
-
-    .card-header {
-        background-color: #007bff;
-        color: white;
-    }
-
-    .table tbody tr:hover {
-        background-color: #f1f1f1;
-    }
-
-    .d-flex .btn {
-        width: auto;
-        margin-left: 10px;
-    }
-    .fas {
-        margin-right: 5px;
-    }
-    .btn-danger:hover, .btn-success:hover {
-        opacity: 0.9;
-    }
-</style>

@@ -67,7 +67,7 @@
                     {{ $kategoris->total() }} entries</p>
 
                 <div class="pagination-links">
-                    {{ $kategoris->links() }}
+                    {{ $kategoris->links('pagination::bootstrap-5') }}
                 </div>
 
                 <form id="entriesForm" action="{{ route('kategori.index') }}" method="GET" class="form-container">

@@ -96,7 +96,7 @@
                     $transaksis->total() }} entri</p>
 
                 <div class="pagination-links">
-                    {{ $transaksis->links() }}
+                    {{ $transaksis->links('pagination::bootstrap-5') }}
                 </div>
 
                 <form id="entriesForm" action="{{ route('transaksi.index') }}" method="GET" class="form-container">

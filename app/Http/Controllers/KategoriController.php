@@ -10,13 +10,17 @@ class KategoriController extends Controller
     public function index(Request $request)
     {
         $entries = $request->get('entries', 10); 
-        $search = $request->get('search', null);
+        $search = $request->get('search', null); 
         $query = Kategori::query();
         if ($search) {
             $query->where('nama', 'LIKE', "%{$search}%");
         }
         $kategoris = $query->paginate($entries);
-        return view('kategori.index', compact('kategoris'));
+        $kategoris->appends([
+            'entries' => $entries,
+            'search' => $search,
+        ]);
+        return view('kategori.index', compact('kategoris', 'entries', 'search'));
     }
 
     public function create()

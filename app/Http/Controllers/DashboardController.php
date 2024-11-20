@@ -53,6 +53,8 @@ class DashboardController extends Controller
             ->whereDate('tanggaltransaksi', '<=', $end)
             ->with(['detailTransaksi.produk'])
             ->get();
+            
+        $penerimaanTerbaru = Penerimaan::with('produk')->paginate(request('entries', 10));
 
         // Ambil data penjualan harian untuk grafik
         $penjualanHarian = Transaksi::selectRaw('DATE(tanggaltransaksi) as date, SUM(total) as total_penjualan')

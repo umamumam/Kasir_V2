@@ -91,7 +91,7 @@
                     entries</p>
 
                 <div class="pagination-links">
-                    {{ $users->links() }}
+                    {{ $users->links('pagination::bootstrap-5') }}
                 </div>
 
                 <form id="entriesForm" action="{{ route('users.index') }}" method="GET" class="form-container">

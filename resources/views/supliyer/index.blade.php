@@ -76,7 +76,7 @@
                     {{ $supliyers->total() }} entri</p>
 
                 <div class="pagination-links">
-                    {{ $supliyers->links() }}
+                    {{ $supliyers->links('pagination::bootstrap-5') }}
                 </div>
 
                 <form id="entriesForm" action="{{ route('supliyer.index') }}" method="GET" class="form-container">

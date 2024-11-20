@@ -66,7 +66,7 @@
             <div class="d-flex justify-content-between align-items-center mt-3 mb-3" style="margin-left: 10px;">
                 <p class="mb-0">Showing {{ $logs->firstItem() ?? 0 }} to {{ $logs->lastItem() ?? 0 }} of {{ $logs->total() }} entries</p>
                 <div class="pagination-links">
-                    {{ $logs->links() }}
+                    {{ $logs->links('pagination::bootstrap-5') }}
                 </div>
             </div>
         </div>

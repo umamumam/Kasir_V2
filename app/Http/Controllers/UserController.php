@@ -14,18 +14,19 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        // Hanya admin yang dapat mengakses halaman ini
         if (Auth::user()->role !== 'admin') {
             abort(403, 'Anda tidak memiliki izin untuk mengakses halaman ini.');
         }
-        $search = $request->input('search');
+        $search = $request->input('search', '');
         $entries = $request->input('entries', 10);
-
-        // $users = User::all();
         $users = User::where('name', 'like', "%$search%")
-        ->orWhere('email', 'like', "%$search%")
-        ->paginate($entries);
-        return view('users.index', compact('users'));
+            ->orWhere('email', 'like', "%$search%")
+            ->paginate($entries);
+        $users->appends([
+            'search' => $search,
+            'entries' => $entries,
+        ]);
+        return view('users.index', compact('users', 'search', 'entries'));
     }
 
     public function create()

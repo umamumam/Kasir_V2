@@ -6,7 +6,7 @@
         <!-- Header -->
         <div class="card-header text-center d-flex justify-content-between align-items-center"
             style="background: linear-gradient(90deg, #1e90ff, #00bfff); color: white; border-radius: 5px;">
-            <h4 style="color: white"><i class="fas fa-exchange-alt me-2"></i> Tambah Transaksi</h4>
+            <h4 style="color: white"><i class="fas fa-cart-plus me-2"></i> Tambah Transaksi</h4>
         </div>
 
         <!-- Form -->
@@ -28,7 +28,7 @@
             </div>
 
             <!-- Tombol Tambah Produk -->
-            <div class="text-end">
+            <div class="text-start">
                 <button type="button" id="add-product" class="btn btn-secondary shadow-sm">
                     <i class="fas fa-plus-circle me-2"></i> Tambah Produk
                 </button>
@@ -72,35 +72,84 @@
     </div>
 </div>
 
+<!-- Modal Popup untuk Pilih Produk -->
+<div class="modal fade" id="produkModal" tabindex="-1" aria-labelledby="produkModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="produkModalLabel">Pilih Produk</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="search-produk" class="form-control mb-3" placeholder="Cari produk..." oninput="filterProduk()">
+                <div id="produk-list">
+                    @foreach ($produks as $produk)
+                        <div class="product-item" data-id="{{ $produk->id }}" data-harga="{{ $produk->harga_jual }}">
+                            <p>{{ $produk->nama }} - Rp {{ number_format($produk->harga_jual, 2, ',', '.') }}</p>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Script -->
 <script>
+    // Show modal when add product button is clicked
     document.getElementById('add-product').addEventListener('click', function () {
-        var produkFields = document.getElementById('produk-table-body');
+        var produkModal = new bootstrap.Modal(document.getElementById('produkModal'));
+        produkModal.show();
+    });
 
-        var newRow = document.createElement('tr');
-        newRow.classList.add('produk-row', 'animated', 'fadeIn');
-        newRow.innerHTML = `
-            <td>
-                <select name="produk_id[]" class="form-control produk-select shadow-sm" required>
-                    @foreach ($produks as $produk)
-                        <option value="{{ $produk->id }}" data-harga="{{ $produk->harga_jual }}">{{ $produk->nama }} - Rp {{ number_format($produk->harga_jual, 2, ',', '.') }}</option>
-                    @endforeach
-                </select>
-            </td>
-            <td>
-                <input type="number" name="jumlah[]" class="form-control jumlah-input shadow-sm" min="1" value="1" required>
-            </td>
-            <td class="harga">Rp 0</td>
-            <td class="total-harga">Rp 0</td>
-            <td>
-                <button type="button" class="btn btn-danger cancel-product shadow-sm">
-                    <i class="fas fa-trash-alt me-2"></i> Batal
-                </button>
-            </td>
-        `;
+    // Filter produk list based on search input
+    function filterProduk() {
+        var query = document.getElementById('search-produk').value.toLowerCase();
+        var produkItems = document.querySelectorAll('.product-item');
+        
+        produkItems.forEach(function(item) {
+            var productName = item.querySelector('p').textContent.toLowerCase();
+            if (productName.includes(query)) {
+                item.style.display = '';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
 
-        produkFields.appendChild(newRow);
-        updateTotalPrice();
+    // Add selected product to the table
+    document.querySelectorAll('.product-item').forEach(function(item) {
+        item.addEventListener('click', function () {
+            var productId = item.getAttribute('data-id');
+            var productPrice = item.getAttribute('data-harga');
+            var productName = item.querySelector('p').textContent;
+
+            var produkFields = document.getElementById('produk-table-body');
+
+            var newRow = document.createElement('tr');
+            newRow.classList.add('produk-row', 'animated', 'fadeIn');
+            newRow.innerHTML = `
+                <td>
+                    <select name="produk_id[]" class="form-control produk-select shadow-sm" required>
+                        <option value="${productId}" data-harga="${productPrice}">${productName}</option>
+                    </select>
+                </td>
+                <td>
+                    <input type="number" name="jumlah[]" class="form-control jumlah-input shadow-sm" min="1" value="1" required>
+                </td>
+                <td class="harga">Rp ${formatRupiah(productPrice)}</td>
+                <td class="total-harga">Rp ${formatRupiah(productPrice)}</td>
+                <td>
+                    <button type="button" class="btn btn-danger cancel-product shadow-sm">
+                        <i class="fas fa-trash-alt me-2"></i> Batal
+                    </button>
+                </td>
+            `;
+
+            produkFields.appendChild(newRow);
+            updateTotalPrice();
+            bootstrap.Modal.getInstance(document.getElementById('produkModal')).hide(); 
+        });
     });
 
     function formatRupiah(value) {

@@ -13,17 +13,21 @@ class PenerimaanController extends Controller
     // Fungsi untuk menampilkan daftar penerimaan
     public function index(Request $request)
     {
-        $search = $request->get('search');
-        $entries = $request->get('entries', 10);  
-        $penerimaan = Penerimaan::with('produk') 
-            ->when($search, function($query, $search) {
-                return $query->whereHas('produk', function($q) use ($search) {
+        $search = $request->get('search', '');
+        $entries = $request->get('entries', 10); 
+        $penerimaan = Penerimaan::with('produk')
+            ->when($search, function ($query, $search) {
+                return $query->whereHas('produk', function ($q) use ($search) {
                     $q->where('nama', 'like', '%' . $search . '%');
                 });
             })
             ->paginate($entries);
-        return view('penerimaan.index', compact('penerimaan'));
-    }
+        $penerimaan->appends([
+            'search' => $search,
+            'entries' => $entries,
+        ]);
+        return view('penerimaan.index', compact('penerimaan', 'search', 'entries'));
+    }    
 
     // Fungsi untuk menampilkan form penerimaan baru
     public function create()
