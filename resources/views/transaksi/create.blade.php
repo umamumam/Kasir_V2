@@ -96,28 +96,36 @@
 
 <!-- Script -->
 <script>
-    // Show modal when add product button is clicked
     document.getElementById('add-product').addEventListener('click', function () {
         var produkModal = new bootstrap.Modal(document.getElementById('produkModal'));
         produkModal.show();
+        document.getElementById('search-produk').focus();
     });
 
-    // Filter produk list based on search input
-    function filterProduk() {
-        var query = document.getElementById('search-produk').value.toLowerCase();
+    document.getElementById('search-produk').addEventListener('input', function (e) {
+        var query = e.target.value.toLowerCase();
         var produkItems = document.querySelectorAll('.product-item');
-        
+        var matchedItem = null;
+
         produkItems.forEach(function(item) {
+            var productCode = item.getAttribute('data-kode').toLowerCase();
             var productName = item.querySelector('p').textContent.toLowerCase();
-            if (productName.includes(query)) {
+
+            if (productCode.includes(query) || productName.includes(query)) {
                 item.style.display = '';
+                if (productCode === query) {
+                    matchedItem = item; 
+                }
             } else {
                 item.style.display = 'none';
             }
         });
-    }
+        if (matchedItem) {
+            matchedItem.click();
+            e.target.value = ''; 
+        }
+    });
 
-    // Add selected product to the table
     document.querySelectorAll('.product-item').forEach(function(item) {
         item.addEventListener('click', function () {
             var productId = item.getAttribute('data-id');
