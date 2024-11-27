@@ -109,7 +109,7 @@
                         </select>
                     </td>
                     <td><input type="number" name="jumlah[]" class="form-control" required min="1"></td>
-                    <td><input type="number" name="harga_jual[]" class="form-control harga-jual" value="${productPrice}" readonly></td>
+                    <td><input type="number" name="harga_jual[]" class="form-control harga-jual" value="${productPrice}"></td>
                     <td><input type="date" name="tanggal[]" class="form-control tanggal" value="{{ date('Y-m-d') }}" required></td>
                     <td><button type="button" class="btn btn-danger remove-row"><i class="fas fa-trash-alt"></i> Hapus</button></td>
                 </tr>

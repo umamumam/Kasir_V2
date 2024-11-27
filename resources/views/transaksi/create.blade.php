@@ -84,10 +84,10 @@
                 <input type="text" id="search-produk" class="form-control mb-3" placeholder="Cari produk..." oninput="filterProduk()">
                 <div id="produk-list">
                     @foreach ($produks as $produk)
-                        <div class="product-item" data-id="{{ $produk->id }}" data-harga="{{ $produk->harga_jual }}">
-                            <p>{{ $produk->nama }} - Rp {{ number_format($produk->harga_jual, 2, ',', '.') }}</p>
+                        <div class="product-item" data-id="{{ $produk->id }}" data-harga="{{ $produk->harga_jual }}" data-kode="{{ $produk->kode }}">
+                            <p>{{ $produk->nama }} ({{ $produk->kode }})</p>
                         </div>
-                    @endforeach
+                    @endforeach                
                 </div>
             </div>
         </div>
