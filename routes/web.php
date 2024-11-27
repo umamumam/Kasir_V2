@@ -51,4 +51,8 @@ Route::get('/dashboard/export-excel', [DashboardController::class, 'exportExcel'
 Route::get('dashboard/export-laporan-excel', [DashboardController::class, 'exportLaporanExcel'])
     ->name('dashboard.exportLaporanExcel');
 
-
+    Route::get('/api/produk-by-barcode/{barcode}', function ($barcode) {
+        $produk = \App\Models\Produk::where('kode', $barcode)->first();
+        return response()->json($produk);
+    });
+    

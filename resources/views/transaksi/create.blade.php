@@ -33,6 +33,11 @@
                     <i class="fas fa-plus-circle me-2"></i> Tambah Produk
                 </button>
             </div>
+            <div class="mb-3">
+                <label for="barcode" class="form-label">Scan Barcode</label>
+                <input type="text" id="barcode" class="form-control shadow-sm" placeholder="Masukkan atau scan barcode produk...">
+            </div>
+            
 
             <!-- Tabel Produk -->
             <div class="table-responsive mt-3">
@@ -96,6 +101,58 @@
 
 <!-- Script -->
 <script>
+    document.getElementById('barcode').addEventListener('keypress', async function (e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+
+            let barcode = e.target.value.trim();
+            if (!barcode) return;
+
+            // Cari produk berdasarkan barcode
+            try {
+                let response = await fetch(`/api/produk-by-barcode/${barcode}`);
+                if (!response.ok) throw new Error('Produk tidak ditemukan');
+                let produk = await response.json();
+
+                if (produk) {
+                    // Tambahkan produk ke tabel
+                    let produkFields = document.getElementById('produk-table-body');
+                    let newRow = document.createElement('tr');
+                    newRow.innerHTML = `
+                        <td>
+                            <select name="produk_id[]" class="form-control produk-select shadow-sm" required>
+                                <option value="${produk.id}" data-harga="${produk.harga_jual}">
+                                    ${produk.nama} (Kode: ${produk.kode})
+                                </option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="number" name="jumlah[]" class="form-control jumlah-input shadow-sm" min="1" value="1" required>
+                        </td>
+                        <td class="harga">Rp ${formatRupiah(produk.harga_jual)}</td>
+                        <td class="total-harga">Rp ${formatRupiah(produk.harga_jual)}</td>
+                        <td>
+                            <button type="button" class="btn btn-danger cancel-product shadow-sm">
+                                <i class="fas fa-trash-alt me-2"></i> Batal
+                            </button>
+                        </td>
+                    `;
+                    produkFields.appendChild(newRow);
+
+                    updateTotalPrice();
+
+                    // Bersihkan input barcode
+                    e.target.value = '';
+                } else {
+                    alert('Produk tidak ditemukan.');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('Terjadi kesalahan saat mencari produk.');
+            }
+        }
+    });
+
     document.getElementById('add-product').addEventListener('click', function () {
         var produkModal = new bootstrap.Modal(document.getElementById('produkModal'));
         produkModal.show();

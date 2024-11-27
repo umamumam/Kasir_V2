@@ -27,7 +27,7 @@
                                     <select name="produk_id[]" class="form-control produk-select" required>
                                         <option value="">Pilih Produk</option>
                                         @foreach ($produks as $produk)
-                                            <option value="{{ $produk->id }}" data-harga="{{ $produk->harga_jual }}">{{ $produk->nama }} (Stok: {{ $produk->stok }})</option>
+                                            <option value="{{ $produk->id }}" data-harga="{{ $produk->harga_jual }}">{{ $produk->nama }} ({{ $produk->kode }})</option>
                                         @endforeach
                                     </select>
                                 </td>
@@ -39,7 +39,11 @@
                         </tbody>
                     </table>
                 </div>
-
+                <div class="mb-3">
+                    <label for="barcode" class="form-label">Scan Barcode</label>
+                    <input type="text" id="barcode" class="form-control" placeholder="Masukkan atau scan barcode produk...">
+                </div>
+                
                 <div class="d-flex justify-content-between mt-3">
                     <button type="button" class="btn btn-success" id="addRow"><i class="fas fa-plus-circle"></i> Tambah Produk</button>
                     <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan</button>
@@ -62,8 +66,8 @@
                 <div id="produk-list">
                     @foreach ($produks as $produk)
                         <div class="product-item" data-id="{{ $produk->id }}" data-harga="{{ $produk->harga_jual }}">
-                            <p>{{ $produk->nama }} - Rp {{ number_format($produk->harga_jual, 2, ',', '.') }}</p>
-                        </div>
+                            <p>{{ $produk->nama }} ({{ $produk->kode }})</p>
+                        </div>                    
                     @endforeach
                 </div>
             </div>
@@ -72,6 +76,50 @@
 </div>
 
 <script>
+    document.getElementById('barcode').addEventListener('keypress', async function (e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            let barcode = e.target.value.trim();
+            
+            if (!barcode) return;
+
+            // Lakukan pencarian produk berdasarkan barcode
+            try {
+                let response = await fetch(`/api/produk-by-barcode/${barcode}`);
+                let produk = await response.json();
+
+                if (produk) {
+                    // Tambahkan produk ke tabel
+                    let tableBody = document.querySelector('#produkTable tbody');
+                    let newRow = `
+                        <tr>
+                            <td>
+                                <select name="produk_id[]" class="form-control produk-select" required>
+                                    <option value="${produk.id}" data-harga="${produk.harga_jual}">
+                                        ${produk.nama} (Kode: ${produk.kode})
+                                    </option>
+                                </select>
+                            </td>
+                            <td><input type="number" name="jumlah[]" class="form-control" required min="1"></td>
+                            <td><input type="number" name="harga_jual[]" class="form-control harga-jual" value="${produk.harga_jual}" readonly></td>
+                            <td><input type="date" name="tanggal[]" class="form-control tanggal" value="{{ date('Y-m-d') }}" required></td>
+                            <td><button type="button" class="btn btn-danger remove-row"><i class="fas fa-trash-alt"></i> Hapus</button></td>
+                        </tr>
+                    `;
+                    tableBody.insertAdjacentHTML('beforeend', newRow);
+
+                    // Bersihkan input barcode
+                    e.target.value = '';
+                } else {
+                    alert('Produk dengan barcode ini tidak ditemukan.');
+                }
+            } catch (error) {
+                console.error('Terjadi kesalahan:', error);
+                alert('Gagal mencari produk. Periksa koneksi atau hubungi admin.');
+            }
+        }
+    });
+
     // Show modal when add product button is clicked
     document.getElementById('addRow').addEventListener('click', function () {
         var produkModal = new bootstrap.Modal(document.getElementById('produkModal'));
