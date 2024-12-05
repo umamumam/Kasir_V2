@@ -1,3 +1,31 @@
+Tampilan Login :
+![image](https://github.com/user-attachments/assets/885882e4-aa05-4e24-a224-c3c9938a6b3a)
+
+Dashboard Awal:
+![image](https://github.com/user-attachments/assets/da9d11d3-f30f-4476-835a-0998b250e98f)
+
+Manajemen User:
+![image](https://github.com/user-attachments/assets/fb3905bd-ef0c-4918-a2f6-52d6956cb990)
+
+Master Produk Meliputi Kategori, Produk, Supliyer, dan Penerimaan.
+![image](https://github.com/user-attachments/assets/4a1d9053-cbee-4a33-aba7-960882dc349e)
+
+Tambah Produk Bisa Terdapat Input Barcode:
+![image](https://github.com/user-attachments/assets/64e29d8b-0eba-4cde-b5d2-726348a457a3)
+
+Penerimaan barang. digunakan untuk menambahkan barang berdasarkan produk yang sudah ada sebelumnya.
+![image](https://github.com/user-attachments/assets/6b00f512-a092-4a3c-ba1a-be932078c3ca)
+![image](https://github.com/user-attachments/assets/b84496b7-fa0f-4bb8-b1ff-8e75f6ec300e)
+
+Fitur Scan Barcode Otomatis Auto Menambahkan Produk sesuai Kode:
+![image](https://github.com/user-attachments/assets/f445b428-1977-47f6-a8ce-c08e517c88ce)
+
+Transaksi:
+![image](https://github.com/user-attachments/assets/04034dac-bfe3-402d-9b6e-c9f507e26904)
+Terdapat Fitur Tambah Barang Manual dan Scan Menggunakan Barcode. yang otomatis menambahkan Produk sesuai kode barcode:
+![image](https://github.com/user-attachments/assets/0937964a-4442-4df8-83f0-4fb89f758361)
+
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
