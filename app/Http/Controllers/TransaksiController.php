@@ -59,59 +59,72 @@ class TransaksiController extends Controller
             'kode' => 'required|unique:transaksis',
             'produk_id' => 'required|array',
             'jumlah' => 'required|array',
-            'bayar' => 'required|numeric',
+            'bayar' => 'required|numeric|min:1',
             'tanggaltransaksi' => 'nullable|date',
         ]);
-
+    
+        $total = 0;
+        $produkTerpilih = [];
+    
+        foreach ($request->produk_id as $index => $produk_id) {
+            $produk = Produk::findOrFail($produk_id);
+            $jumlah = $request->jumlah[$index];
+    
+            // Validasi stok sebelum menyimpan transaksi
+            if ($produk->stok <= 0) {
+                return redirect()->back()->with('error', "Produk {$produk->nama} tidak memiliki stok!");
+            }
+    
+            if ($jumlah > $produk->stok) {
+                return redirect()->back()->with('error', "Jumlah produk {$produk->nama} melebihi stok tersedia!");
+            }
+    
+            $subtotal = $produk->harga_jual * $jumlah;
+            $total += $subtotal;
+            $produkTerpilih[] = [
+                'produk' => $produk,
+                'jumlah' => $jumlah,
+                'subtotal' => $subtotal,
+            ];
+        }
+    
         // Buat transaksi baru
         $transaksi = new Transaksi();
         $transaksi->kode = $request->kode;
-        $transaksi->total = 0; // Akan dihitung setelah detail transaksi disimpan
+        $transaksi->total = $total;
         $transaksi->bayar = $request->bayar;
-        $transaksi->kembalian = 0; // Akan dihitung setelah total dihitung
-        $transaksi->tanggaltransaksi = $request->tanggaltransaksi ?: now(); // Jika tidak ada tanggaltransaksi, gunakan tanggaltransaksi sekarang
+        $transaksi->kembalian = $request->bayar - $total;
+        $transaksi->tanggaltransaksi = $request->tanggaltransaksi ?: now();
         $transaksi->save();
-
+    
         // Menambahkan log untuk transaksi baru
         Log::create([
             'activity' => 'Transaksi baru dibuat: ' . $transaksi->kode,
             'loggable_type' => Transaksi::class,
             'loggable_id' => $transaksi->id,
         ]);
-
-        // Simpan detail transaksi
-        $total = 0;
-        foreach ($request->produk_id as $index => $produk_id) {
-            $produk = Produk::find($produk_id);
-            $jumlah = $request->jumlah[$index];
-
-            // Mengurangi stok produk
-            if ($produk->stok >= $jumlah) {
-                $produk->stok -= $jumlah;
-                $produk->save();
-            } else {
-                return redirect()->back()->with('error', 'Stok tidak cukup untuk produk ' . $produk->nama);
-            }
-
-            $subtotal = $produk->harga_jual * $jumlah;
-            $total += $subtotal;
-
+    
+        // Simpan detail transaksi dan kurangi stok produk
+        foreach ($produkTerpilih as $data) {
+            $produk = $data['produk'];
+            $jumlah = $data['jumlah'];
+    
+            // Kurangi stok produk
+            $produk->stok -= $jumlah;
+            $produk->save();
+    
             DetailTransaksi::create([
                 'transaksi_id' => $transaksi->id,
-                'produk_id' => $produk_id,
+                'produk_id' => $produk->id,
                 'harga' => $produk->harga_jual,
                 'jumlah' => $jumlah,
-                'subtotal' => $subtotal,
+                'subtotal' => $data['subtotal'],
             ]);
         }
-
-        // Update total dan kembalian
-        $transaksi->total = $total;
-        $transaksi->kembalian = $request->bayar - $total;
-        $transaksi->save();
-
+    
         return redirect()->route('transaksi.index')->with('success', 'Transaksi berhasil dilakukan');
     }
+    
 
     // Fungsi untuk menampilkan form edit transaksi
     public function edit(Transaksi $transaksi)

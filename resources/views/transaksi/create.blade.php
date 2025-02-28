@@ -45,6 +45,7 @@
                     <thead class="table-light">
                         <tr>
                             <th>Produk</th>
+                            <th>Stok</th>
                             <th>Jumlah</th>
                             <th>Harga</th>
                             <th>Total</th>
@@ -89,9 +90,11 @@
                 <input type="text" id="search-produk" class="form-control mb-3" placeholder="Cari produk..." oninput="filterProduk()">
                 <div id="produk-list">
                     @foreach ($produks as $produk)
-                        <div class="product-item" data-id="{{ $produk->id }}" data-harga="{{ $produk->harga_jual }}" data-kode="{{ $produk->kode }}">
-                            <p>{{ $produk->nama }} ({{ $produk->kode }})</p>
-                        </div>
+                        @if ($produk->stok > 0)
+                            <div class="product-item" data-id="{{ $produk->id }}" data-harga="{{ $produk->harga_jual }}" data-kode="{{ $produk->kode }}">
+                                <p>{{ $produk->nama }} ({{ $produk->kode }}) (Sisa :{{ $produk->stok }})</p>
+                            </div>
+                        @endif
                     @endforeach                
                 </div>
             </div>
@@ -126,6 +129,7 @@
                                 </option>
                             </select>
                         </td>
+                        <td class="stok">${produk.stok}</td>
                         <td>
                             <input type="number" name="jumlah[]" class="form-control jumlah-input shadow-sm" min="1" value="1" required>
                         </td>
@@ -187,6 +191,7 @@
         item.addEventListener('click', function () {
             var productId = item.getAttribute('data-id');
             var productPrice = item.getAttribute('data-harga');
+            var productStock = item.getAttribute('data-stok'); 
             var productName = item.querySelector('p').textContent;
 
             var produkFields = document.getElementById('produk-table-body');
@@ -199,6 +204,7 @@
                         <option value="${productId}" data-harga="${productPrice}">${productName}</option>
                     </select>
                 </td>
+                <td class="stok">${productStock}</td>
                 <td>
                     <input type="number" name="jumlah[]" class="form-control jumlah-input shadow-sm" min="1" value="1" required>
                 </td>
@@ -265,5 +271,20 @@
             }, 300);
         }
     });
+
+    document.addEventListener('input', function (e) {
+        if (e.target && e.target.classList.contains('jumlah-input')) {
+            var row = e.target.closest('tr');
+            var stok = parseInt(row.querySelector('.stok').textContent.trim());
+            var jumlah = parseInt(e.target.value);
+
+            if (jumlah > stok) {
+                alert('Jumlah melebihi stok yang tersedia!');
+                e.target.value = stok; 
+            }
+            updateTotalPrice();
+        }
+    });
+
 </script>
 @endsection
