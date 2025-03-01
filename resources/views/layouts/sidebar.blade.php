@@ -33,7 +33,7 @@
                     </svg>
                 </span>
             </span>
-            <span class="app-brand-text demo menu-text fw-semibold ms-2">Smartcashier</span>
+            <span class="app-brand-text demo menu-text fw-semibold ms-2" style="font-size: 14px;">Lancar Manunggal</span>
         </a>
         {{-- <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
             <i class="menu-toggle-icon d-xl-block align-middle"></i>

@@ -12,18 +12,29 @@ class ProdukController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
-        $entries = $request->input('entries', 10); 
+        $entries = $request->input('entries', 10);
+        $sortStok = $request->input('sort_stok', ''); // Default kosong (tanpa sorting)
+    
         $produks = Produk::with('kategori')
             ->when($search, function ($query, $search) {
                 return $query->where('nama', 'like', '%' . $search . '%');
+            })
+            ->when($sortStok, function ($query, $sortStok) {
+                if ($sortStok == 'asc') {
+                    return $query->orderBy('stok', 'asc');
+                } elseif ($sortStok == 'desc') {
+                    return $query->orderBy('stok', 'desc');
+                }
             })
             ->paginate($entries)
             ->appends([
                 'search' => $search,
                 'entries' => $entries,
+                'sort_stok' => $sortStok,
             ]);
-        return view('produk.index', compact('produks'));
-    }
+    
+        return view('produk.index', compact('produks', 'sortStok'));
+    }    
     
 
     public function create()

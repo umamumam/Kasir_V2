@@ -39,7 +39,17 @@
                         <th>No</th>
                         <th>Nama Produk</th>
                         <th>Harga Jual</th>
-                        <th>Stok</th>
+                        <th>
+                            <a href="{{ route('produk.index', array_merge(request()->query(), ['sort_stok' => request('sort_stok') == 'asc' ? 'desc' : 'asc'])) }}"
+                               class="text-decoration-none text-dark">
+                                Stok
+                                @if(request('sort_stok') == 'asc')
+                                    ⬆️
+                                @elseif(request('sort_stok') == 'desc')
+                                    ⬇️
+                                @endif
+                            </a>
+                        </th>
                         <th>Kategori</th>
                         <th>Aksi</th>
                     </tr>

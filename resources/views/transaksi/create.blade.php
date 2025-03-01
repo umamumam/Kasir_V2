@@ -91,8 +91,8 @@
                 <div id="produk-list">
                     @foreach ($produks as $produk)
                         @if ($produk->stok > 0)
-                            <div class="product-item" data-id="{{ $produk->id }}" data-harga="{{ $produk->harga_jual }}" data-kode="{{ $produk->kode }}">
-                                <p>{{ $produk->nama }} ({{ $produk->kode }}) (Sisa :{{ $produk->stok }})</p>
+                            <div class="product-item" data-id="{{ $produk->id }}" data-harga="{{ $produk->harga_jual }}" data-kode="{{ $produk->kode }}" data-stok="{{ $produk->stok }}">
+                                <p>{{ $produk->nama }} ({{ $produk->kode }})</p>
                             </div>
                         @endif
                     @endforeach                

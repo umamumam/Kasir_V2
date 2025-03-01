@@ -63,17 +63,31 @@
                             value="{{ old('stok') }}" required>
                     </div>
 
-                    <div class="input-group input-group-merge mb-6">
-                        <span id="basic-icon-default-name" class="input-group-text">
+                    <!-- Input Kategori dan Dropdown -->
+                    <div class="input-group input-group-merge mb-6" style="position: relative;">
+                        <span id="basic-icon-default-kategori" class="input-group-text">
                             <i class="ri-price-tag-3-line ri-20px"></i>
                         </span>
-                        <select name="kategori_id" class="form-select" required aria-describedby="basic-icon-default-kategori">
+                        <input type="text" class="form-control" id="kategori_input" name="kategori_input" 
+                            placeholder="Masukkan Kategori" oninput="filterKategori()" autocomplete="off"
+                            value="{{ old('kategori_input') }}" style="border-right: 1px solid #ced4da;">
+                        
+                        <input type="hidden" name="kategori_id" id="kategori_id">
+                        
+                        <!-- Opsi Pilihan Kategori -->
+                        <ul id="kategori_list" class="dropdown-menu show" 
+                            style="width: 100%; display: none; position: absolute; top: 100%; left: 0; z-index: 10; 
+                            max-height: 200px; overflow-y: auto; border-radius: 5px; padding: 5px; 
+                            border: 1px solid #ced4da; background: white;">
                             @foreach($kategoris as $kategori)
-                                <option value="{{ $kategori->id }}" {{ old('kategori_id') == $kategori->id ? 'selected' : '' }}>
-                                    {{ $kategori->nama }}
-                                </option>
+                                <li class="kategori_item">
+                                    <a href="javascript:void(0);" class="dropdown-item" 
+                                        onclick="pilihKategori('{{ $kategori->id }}', '{{ $kategori->nama }}')">
+                                        {{ $kategori->nama }}
+                                    </a>
+                                </li>
                             @endforeach
-                        </select>
+                        </ul>
                     </div>
                     
                     <button type="submit" class="btn btn-success">Simpan</button>
@@ -83,4 +97,58 @@
         </div>
     </div>
 </div>
+
+<script>
+    // function filterKategori() {
+    //     const input = document.getElementById('kategori_input').value.toLowerCase();
+    //     const select = document.getElementById('kategori_select');
+    //     const options = select.getElementsByTagName('option');
+
+    //     for (let i = 0; i < options.length; i++) {
+    //         const option = options[i];
+    //         const text = option.textContent.toLowerCase();
+    //         if (text.includes(input)) {
+    //             option.style.display = ''; 
+    //         } else {
+    //             option.style.display = 'none';
+    //         }
+    //     }
+    // }
+    function filterKategori() {
+    let input = document.getElementById("kategori_input").value.toLowerCase();
+    let list = document.getElementById("kategori_list");
+    let items = document.querySelectorAll(".kategori_item");
+
+    let visibleCount = 0;
+    for (let item of items) {
+        let text = item.textContent.toLowerCase();
+        if (text.includes(input) && visibleCount < 5) {
+            item.style.display = "block";
+            visibleCount++;
+        } else {
+            item.style.display = "none";
+        }
+    }
+
+    list.style.display = visibleCount > 0 ? "block" : "none";
+}
+
+function pilihKategori(id, nama) {
+    document.getElementById("kategori_input").value = nama;
+    document.getElementById("kategori_id").value = id;
+    document.getElementById("kategori_list").style.display = "none";
+}
+
+// Sembunyikan dropdown jika klik di luar
+document.addEventListener("click", function(event) {
+    let list = document.getElementById("kategori_list");
+    let input = document.getElementById("kategori_input");
+
+    if (!input.contains(event.target) && !list.contains(event.target)) {
+        list.style.display = "none";
+    }
+});
+
+</script>
+
 @endsection
