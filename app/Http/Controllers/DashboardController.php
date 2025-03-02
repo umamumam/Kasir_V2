@@ -21,6 +21,7 @@ class DashboardController extends Controller
         $totalProduk = Produk::count();
         $totalSupliyer = Supliyer::count();
         $totalKategori = Kategori::count();
+        // $totalPenjualan = Transaksi::count();
         $pendapatanHarian = Transaksi::whereDate('tanggaltransaksi', Carbon::today())
             ->sum('total');
 
@@ -65,7 +66,39 @@ class DashboardController extends Controller
             ->groupBy('date')
             ->orderBy('date', 'asc')
             ->get();
+        // Hitung total penjualan 7 hari terakhir
+        $startDate = Carbon::now()->subDays(6); // 6 hari yang lalu
+        $endDate = Carbon::now(); // Hari ini
 
+        $penjualanMingguan = Transaksi::selectRaw('DATE(tanggaltransaksi) as date, SUM(total) as total_penjualan')
+            ->whereBetween('tanggaltransaksi', [$startDate, $endDate])
+            ->groupBy('date')
+            ->orderBy('date', 'asc')
+            ->get();
+
+        // Ambil total penjualan minggu ini
+        $totalMingguIni = $penjualanMingguan->sum('total_penjualan');
+
+        // Hitung total penjualan minggu lalu (7 hari sebelum minggu ini)
+        $startDateLastWeek = Carbon::now()->subDays(13);
+        $endDateLastWeek = Carbon::now()->subDays(7);
+
+        $totalMingguLalu = Transaksi::whereBetween('tanggaltransaksi', [$startDateLastWeek, $endDateLastWeek])
+            ->sum('total');
+
+        // Hitung persentase perubahan
+        if ($totalMingguLalu > 0) {
+            $persentasePerubahan = (($totalMingguIni - $totalMingguLalu) / $totalMingguLalu) * 100;
+        } else {
+            $persentasePerubahan = $totalMingguIni > 0 ? 100 : 0;
+        }
+
+        // Ambil tanggal dan jumlah penjualan
+        $tanggalMingguan = $penjualanMingguan->pluck('date')->map(function ($date) {
+            return Carbon::parse($date)->format('d M');
+        });
+
+        $penjualanMingguanData = $penjualanMingguan->pluck('total_penjualan');
         // Data untuk grafik
         $tanggal = $penjualanHarian->pluck('date');
         $penjualan = $penjualanHarian->pluck('total_penjualan');
@@ -82,7 +115,11 @@ class DashboardController extends Controller
             'tanggal',  
             'penjualan',
             'totalSupliyer',
-            'totalKategori'
+            'totalKategori',
+            'totalMingguIni',
+            'persentasePerubahan',
+            'tanggalMingguan',
+            'penjualanMingguanData'
         ));
     }
     public function exportExcel()

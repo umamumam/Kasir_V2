@@ -112,36 +112,37 @@
         <div class="col-xl-4 col-md-6">
             <div class="card">
                 <div class="card-header">
-                    <div class="d-flex justify-content-between">
-                        <h5 class="mb-1">Grafik Penjualan</h5>
-                        <div class="dropdown">
-                            <button class="btn text-muted p-0" type="button" id="weeklyOverviewDropdown"
-                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="ri-more-2-line ri-24px"></i>
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="weeklyOverviewDropdown">
-                                <a class="dropdown-item" href="javascript:void(0);">Refresh</a>
-                                <a class="dropdown-item" href="javascript:void(0);">Share</a>
-                                <a class="dropdown-item" href="javascript:void(0);">Update</a>
-                            </div>
-                        </div>
-                    </div>
+                    <h5 class="mb-1">Grafik Penjualan Mingguan</h5>
                 </div>
                 <div class="card-body pt-lg-2">
                     <div id="weeklyOverviewChart"></div>
-                    <div class="mt-1 mt-md-3">
-                        <div class="d-flex align-items-center gap-4">
-                            <h4 class="mb-0">70%</h4>
-                            <p class="mb-0">Your sales performance is 70% 😎 better compared to last
-                                month</p>
-                        </div>
-                        <div class="d-grid mt-3 mt-md-4">
-                            <button class="btn btn-primary" type="button">Details</button>
+        
+                    <!-- Keterangan di bawah grafik -->
+                    <div class="mt-3">
+                        <h4 class="mb-1">Total Penjualan: Rp{{ number_format($totalMingguIni, 0, ',', '.') }}</h4>
+                        <p class="mb-0">
+                            Perbandingan dengan minggu lalu: 
+                            <span class="{{ $persentasePerubahan >= 0 ? 'text-success' : 'text-danger' }}">
+                                {{ number_format($persentasePerubahan, 2) }}%
+                                {!! $persentasePerubahan >= 0 ? '📈' : '📉' !!}
+                            </span>
+                        </p>
+                    </div>
+        
+                    <!-- Tampilkan hari di bawah grafik -->
+                    <div class="mt-3 text-center">
+                        <strong>Hari dalam Minggu:</strong>
+                        <div class="d-flex justify-content-between mt-2">
+                            @foreach ($tanggalMingguan as $tanggal)
+                                <span class="badge bg-primary">{{ $tanggal }}</span>
+                            @endforeach
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        
+        
         <!--/ Weekly Overview Chart -->
 
         <!-- Total Earnings -->
@@ -324,4 +325,26 @@
         // Panggilan awal agar tidak ada delay saat load
         updateDateTime();
 </script>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var options = {
+            chart: {
+                type: "line",
+                height: 280
+            },
+            series: [{
+                name: "Penjualan",
+                data: @json($penjualanMingguanData)
+            }],
+            xaxis: {
+                categories: @json($tanggalMingguan)
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#weeklyOverviewChart"), options);
+        chart.render();
+    });
+</script>
+
 @endsection
