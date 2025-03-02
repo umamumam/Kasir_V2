@@ -421,7 +421,7 @@
                 <div data-i18n="Tables">Tables</div>
             </a>
         </li>
-        <!-- Data Tables -->
+        <!-- Data Tables --> 
         <li class="menu-item">
             <a href="https://demos.themeselection.com/materio-bootstrap-html-admin-template/html/vertical-menu-template/tables-datatables-basic.html"
                 target="_blank" class="menu-link">
