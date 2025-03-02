@@ -34,7 +34,7 @@ class DashboardController extends Controller
             ->get();
 
         // Stok rendah
-        $stokRendah = Produk::where('stok', '<=', 5)->get();
+        $stokRendah = Produk::where('stok', '<=', 5)->count();
 
         // Penerimaan (5 terbaru)
         $penerimaanTerbaru = Penerimaan::with('produk')

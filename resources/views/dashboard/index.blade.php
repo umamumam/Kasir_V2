@@ -98,17 +98,7 @@
                                 </div>
                                 <div class="ms-3">
                                     <p class="mb-0">Stok Terendah</p>
-                                    <h5 class="mb-0">
-                                        @if (count($stokRendah) > 0)
-                                        <ul class="list-unstyled">
-                                            @foreach ($stokRendah as $produk)
-                                            <li>{{ $produk->nama }} - Sisa Stok: {{ $produk->stok }}</li>
-                                            @endforeach
-                                        </ul>
-                                        @else
-                                        -
-                                        @endif
-                                    </h5>
+                                    <h5 class="mb-0">{{ $stokRendah ?? '-' }}</h5>
                                 </div>
                             </div>
                         </div>

@@ -58,6 +58,16 @@
                         <div data-i18n="Analytics">Dashboard</div>
                     </a>
                 </li>
+                <li class="menu-item">
+                    <a href="/produk" class="menu-link">
+                        <div data-i18n="CRM">Produk</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="/penerimaan" class="menu-link">
+                        <div data-i18n="CRM">Penerimaan</div>
+                    </a>
+                </li>
             </ul>
         </li>
 

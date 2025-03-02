@@ -8,10 +8,10 @@
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 0;
-            width: 250px; 
-            font-size: 12px;
-            color: #000; 
+            padding: 10px;
+            width: 250px;
+            font-size: 10px;
+            color: #000;
         }
 
         .text-center {
@@ -26,40 +26,28 @@
 
         .table th, .table td {
             padding: 3px;
-            text-align: left;
+            text-align: center;
             font-size: 10px;
+            border-bottom: 1px solid #000;
         }
 
         .table th {
             font-weight: bold;
-            text-align: center;
-            border-top: 1px solid #000; /* Garis di atas tabel */
-        }
-
-        .table td {
-            text-align: center;
-            border: none; /* Menghilangkan garis dalam tabel */
-        }
-
-        .table tr:last-child td {
-            border-bottom: 1px solid #000; /* Garis di bawah tabel pada baris terakhir */
         }
 
         .total, .bayar, .kembalian {
             font-weight: bold;
             font-size: 10px;
+            margin-top: 5px;
+            text-align: right;
         }
 
         .footer {
-            margin-top: 5px;
+            margin-top: 10px;
             font-size: 10px;
             text-align: center;
             padding-top: 10px;
-            border-top: 1px solid #000; /* Garis di atas footer */
-        }
-
-        .header {
-            margin-bottom: 10px;
+            border-top: 1px solid #000;
         }
 
         .header p {
@@ -68,7 +56,7 @@
         }
 
         .line {
-            border-top: 1px solid #000; 
+            border-top: 1px solid #000;
             margin: 10px 0;
         }
 
@@ -77,15 +65,20 @@
             font-weight: bold;
         }
 
+        .store-address {
+            font-size: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="text-center">
-        <div class="store-name">Toko ABC</div> 
+        <div class="store-name">Agen Sosis Lancar Manunggal</div>
+        <div class="store-address">Jl. Tayu-Jepara depan Kantor Kantor Pos Ngablak</div>
+        <div class="store-address">HP: 085201454015</div>
         <br>
         <label><strong>No:</strong> {{ $transaksi->kode }}</label><br>
         <label><strong>Tanggal:</strong> {{ \Carbon\Carbon::parse($transaksi->tanggaltransaksi)->format('d-m-Y') }}</label>
-        <div class="line"></div> 
+        <div class="line"></div>
     </div>
 
     <table class="table">
@@ -121,6 +114,7 @@
 
     <div class="footer">
         <p>Terima kasih atas transaksi Anda!</p>
+        <p><strong>Barang yang sudah dibeli tidak dapat dikembalikan.</strong></p>
     </div>
 </body>
 </html>
