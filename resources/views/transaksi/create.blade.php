@@ -164,7 +164,7 @@
     });
 
     document.getElementById('search-produk').addEventListener('input', function (e) {
-        var query = e.target.value.toLowerCase();
+        var query = e.target.value.trim();
         var produkItems = document.querySelectorAll('.product-item');
         var matchedItem = null;
 
@@ -174,8 +174,9 @@
 
             if (productCode.includes(query) || productName.includes(query)) {
                 item.style.display = '';
-                if (productCode === query) {
-                    matchedItem = item; 
+
+                if (/^\d+$/.test(query) && productCode === query) {
+                    matchedItem = item;
                 }
             } else {
                 item.style.display = 'none';
