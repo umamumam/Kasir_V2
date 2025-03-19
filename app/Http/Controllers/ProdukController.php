@@ -19,6 +19,7 @@ class ProdukController extends Controller
             ->when($search, function ($query, $search) {
                 return $query->where('nama', 'like', '%' . $search . '%');
             })
+            ->orderBy('nama', 'asc')
             ->when($sortStok, function ($query, $sortStok) {
                 if ($sortStok == 'asc') {
                     return $query->orderBy('stok', 'asc');
