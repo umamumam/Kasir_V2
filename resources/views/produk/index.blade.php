@@ -83,12 +83,60 @@
 
             <!-- Pagination and Entries -->
             <div class="d-flex justify-content-between align-items-center mt-3 custom-container">
-                <p class="mb-0">Menampilkan {{ $produks->firstItem() }} hingga {{ $produks->lastItem() }} dari
-                    {{ $produks->total() }} entri</p>
+                <p class="mb-0">
+                    Menampilkan {{ $produks->firstItem() }} hingga {{ $produks->lastItem() }} dari {{ $produks->total() }} entri
+                </p>
 
-                <div class="pagination-links">
-                    {{ $produks->links('pagination::bootstrap-5') }}
-                </div>
+                @if ($produks->hasPages())
+                    <ul class="pagination justify-content-center">
+                        @if ($produks->onFirstPage())
+                            <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+                        @else
+                            <li class="page-item">
+                                <a class="page-link" href="{{ $produks->previousPageUrl() }}" rel="prev">&laquo;</a>
+                            </li>
+                        @endif
+
+                        @php
+                            $currentPage = $produks->currentPage();
+                            $lastPage = $produks->lastPage();
+                            $start = max(1, $currentPage - 1);
+                            $end = min($lastPage, $currentPage + 1);
+                        @endphp
+
+                        @if ($start > 1)
+                            <li class="page-item">
+                                <a class="page-link" href="{{ $produks->url(1) }}">1</a>
+                            </li>
+                            @if ($start > 2)
+                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                            @endif
+                        @endif
+
+                        @for ($i = $start; $i <= $end; $i++)
+                            <li class="page-item {{ $i == $currentPage ? 'active' : '' }}">
+                                <a class="page-link" href="{{ $produks->url($i) }}">{{ $i }}</a>
+                            </li>
+                        @endfor
+
+                        @if ($end < $lastPage)
+                            @if ($end < $lastPage - 1)
+                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                            @endif
+                            <li class="page-item">
+                                <a class="page-link" href="{{ $produks->url($lastPage) }}">{{ $lastPage }}</a>
+                            </li>
+                        @endif
+
+                        @if ($produks->hasMorePages())
+                            <li class="page-item">
+                                <a class="page-link" href="{{ $produks->nextPageUrl() }}" rel="next">&raquo;</a>
+                            </li>
+                        @else
+                            <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+                        @endif
+                    </ul>
+                @endif
 
                 <form id="entriesForm" action="{{ route('produk.index') }}" method="GET" class="form-container">
                     <select name="entries" class="form-select form-select-sm"
