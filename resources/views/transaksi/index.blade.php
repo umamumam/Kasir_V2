@@ -91,7 +91,7 @@
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
                             </form>
-                            <a href="{{ route('transaksi.print', $transaksi) }}" class="btn btn-success btn-sm">
+                            <a href="{{ route('transaksi.print', $transaksi) }}" target="_blank" rel="noopener noreferrer" class="btn btn-success btn-sm">
                                 <i class="fas fa-print"></i>
                             </a>
                         </td>

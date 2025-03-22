@@ -5,12 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kuitansi - {{ $transaksi->kode }}</title>
     <style>
+        * {
+            margin: 7px;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 10px;
-            width: 250px;
-            font-size: 10px;
+            width: 58mm;
+            font-size: 14px;
             color: #000;
         }
 
@@ -21,59 +25,48 @@
         .table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10px;
+            margin-top: 5px;
         }
 
-        .table th, .table td {
-            padding: 3px;
-            text-align: center;
-            font-size: 10px;
-            border-bottom: 1px solid #000;
-        }
-
-        .table th {
-            font-weight: bold;
+        .table td {
+            padding: 3px 0;
+            font-size: 14px;
         }
 
         .total, .bayar, .kembalian {
             font-weight: bold;
-            font-size: 10px;
+            font-size: 14px;
             margin-top: 5px;
             text-align: right;
         }
 
         .footer {
             margin-top: 10px;
-            font-size: 10px;
+            font-size: 12px;
             text-align: center;
             padding-top: 10px;
             border-top: 1px solid #000;
         }
 
-        .header p {
-            margin: 2px 0;
-            font-size: 10px;
-        }
-
         .line {
             border-top: 1px solid #000;
-            margin: 10px 0;
+            margin: 5px 0;
         }
 
         .store-name {
-            font-size: 12px;
+            font-size: 16px;
             font-weight: bold;
         }
 
         .store-address {
-            font-size: 10px;
+            font-size: 12px;
         }
     </style>
 </head>
 <body>
     <div class="text-center">
         <div class="store-name">Agen Sosis Lancar Manunggal</div>
-        <div class="store-address">Jl. Tayu-Jepara depan Kantor Kantor Pos Ngablak</div>
+        <div class="store-address">Jl. Tayu-Jepara depan Kantor Pos Ngablak</div>
         <div class="store-address">HP: 085201454015</div>
         <br>
         <label><strong>No:</strong> {{ $transaksi->kode }}</label><br>
@@ -82,21 +75,16 @@
     </div>
 
     <table class="table">
-        <thead>
-            <tr>
-                <th>Produk</th>
-                <th>Harga</th>
-                <th>Qty</th>
-                <th>Subtotal</th>
-            </tr>
-        </thead>
         <tbody>
             @foreach($transaksi->detailTransaksi as $detail)
                 <tr>
-                    <td>{{ $detail->produk->nama }}</td>
-                    <td>{{ number_format($detail->harga, 0) }}</td>
-                    <td>{{ $detail->jumlah }}</td>
-                    <td>{{ number_format($detail->subtotal, 0) }}</td>
+                    <td>
+                        {{ $detail->produk->nama }} <br>
+                        {{ number_format($detail->harga, 0) }} x {{ $detail->jumlah }}
+                    </td>
+                    <td style="text-align: right;">
+                        {{ number_format($detail->subtotal, 0) }}
+                    </td>
                 </tr>
             @endforeach
         </tbody>
