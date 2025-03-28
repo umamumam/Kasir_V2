@@ -140,6 +140,16 @@
             }
         }
     });
+    document.addEventListener("DOMContentLoaded", function () {
+        var tanggalInput = document.getElementById("tanggaltransaksi");
+
+        if (!tanggalInput.value) {
+            var today = new Date();
+            var formattedDate = today.toISOString().split("T")[0]; // Format YYYY-MM-DD
+            tanggalInput.value = formattedDate;
+        }
+    });
+
     document.addEventListener('input', function(e) {
         if (e.target && e.target.classList.contains('produk-input')) {
             var input = e.target;
