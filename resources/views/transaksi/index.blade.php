@@ -15,10 +15,10 @@
                 <!-- Filter by Date -->
                 <input type="date" name="tanggal_dari" class="form-control form-control-sm w-auto"
                     placeholder="Dari Tanggal" value="{{ request('tanggal_dari', now()->toDateString()) }}"
-                    style="min-width: 150px;">
+                    style="min-width: 200px;">
                 <input type="date" name="tanggal_sampai" class="form-control form-control-sm w-auto"
                     placeholder="Sampai Tanggal" value="{{ request('tanggal_sampai', now()->toDateString()) }}"
-                    style="min-width: 150px;">
+                    style="min-width: 200px;">
 
                 <!-- Filter by Transaction Code -->
                 <input type="text" name="kode_transaksi" class="form-control form-control-sm w-auto"
@@ -145,12 +145,63 @@
         margin-right: 10px;
     }
 
-    @media (max-width: 768px) {
-        .table-responsive {
-            margin-left: 5px;
-            margin-right: 5px;
-        }
+@media (max-width: 768px) {
+    .card-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
     }
+
+    .card-title {
+        text-align: center;
+        width: 100%;
+    }
+
+    .card-header > div {
+        width: 100%;
+    }
+
+    .card-header a.btn {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    form.d-flex {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    /* Tanggal kiri & kanan */
+    .tanggal-container {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        gap: 10px;
+    }
+
+    .tanggal-container input[type="date"] {
+        flex: 1;
+        min-width: 0;
+    }
+
+    /* Input "Cari Kode Transaksi" full width */
+    form.d-flex input[name="kode_transaksi"] {
+        width: 100%;
+    }
+
+    form.d-flex button {
+        width: 100%;
+    }
+
+    .btn {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+
 </style>
 
 @endsection

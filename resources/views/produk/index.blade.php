@@ -3,25 +3,25 @@
 @section('content')
 <div class="col-12">
     <div class="card overflow-hidden">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <div>
+        <div class="card-header d-flex justify-content-between align-items-center flex-wrap">
+            <div class="w-100 w-md-auto text-center text-md-start mb-2 mb-md-0">
                 <h5 class="card-title mb-0">Daftar Produk</h5>
-                <a href="{{ route('produk.create') }}" class="btn btn-primary mt-2">
+                <a href="{{ route('produk.create') }}" class="btn btn-primary mt-2 tambah-produk">
                     <i class="ri-add-line"></i> Tambah Produk
                 </a>
             </div>
             <!-- Search Form -->
-            <form action="{{ route('produk.index') }}" method="GET" class="d-flex align-items-center gap-2">
-                <input type="text" name="search" class="form-control form-control-sm w-auto" placeholder="Cari produk..."
-                    value="{{ request('search') }}" style="min-width: 200px;">
-                <button type="submit" class="btn btn-primary btn-sm px-3" style="height: calc(2.2em + .5rem + 2px);">
-                    <i class="fas fa-search"></i>
+            <form action="{{ route('produk.index') }}" method="GET" class="d-flex align-items-center gap-2 search-container ms-md-auto">
+                <input type="text" name="search" class="form-control form-control-sm w-auto search-input"
+                    placeholder="Cari produk..." value="{{ request('search') }}">
+                <button type="submit" class="btn btn-primary btn-sm search-button">
+                    <i class="fas fa-search"></i> <span class="d-none d-md-inline">Cari</span>
                 </button>
             </form>
         </div>
 
         <!-- Table -->
-        <div class="table-responsive">
+        <div class="table-responsive" style="margin: 0 15px;">
             @if(session('success'))
             <script>
                 Swal.fire({
@@ -40,8 +40,7 @@
                         <th>Nama Produk</th>
                         <th>Harga Jual</th>
                         <th>
-                            <a href="{{ route('produk.index', array_merge(request()->query(), ['sort_stok' => request('sort_stok') == 'asc' ? 'desc' : 'asc'])) }}"
-                               class="text-decoration-none text-dark">
+                            <a href="{{ route('produk.index', array_merge(request()->query(), ['sort_stok' => request('sort_stok') == 'asc' ? 'desc' : 'asc'])) }}" class="text-decoration-none text-dark">
                                 Stok
                                 @if(request('sort_stok') == 'asc')
                                     ⬆️
@@ -64,15 +63,13 @@
                         <td>{{ $produk->kategori->nama }}</td>
                         <td>
                             <a href="{{ route('produk.edit', $produk) }}" class="btn btn-warning btn-sm">
-                                <i class="ri-edit-2-line"></i> Edit
+                                <i class="ri-edit-2-line"></i> <span>Edit</span>
                             </a>
-                            <form action="{{ route('produk.destroy', $produk) }}" method="POST"
-                                style="display:inline;">
+                            <form action="{{ route('produk.destroy', $produk) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm"
-                                    onclick="return confirm('Anda yakin ingin menghapus produk ini?')">
-                                    <i class="ri-delete-bin-line"></i> Hapus
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Anda yakin ingin menghapus produk ini?')">
+                                    <i class="ri-delete-bin-line"></i> <span>Hapus</span>
                                 </button>
                             </form>
                         </td>
@@ -168,5 +165,40 @@
         display: flex;
         justify-content: flex-end;
     }
+@media (max-width: 768px) {
+    .card-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .tambah-produk {
+        width: 100%;
+    }
+
+    .search-container {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .search-input {
+        flex: 1;
+    }
+
+    .search-button {
+        width: 45px;
+        height: 40px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn-sm span {
+        display: none;
+    }
+}
+
+
 </style>
 @endsection

@@ -1,6 +1,17 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+    @media (max-width: 768px) {
+    #produk-table th:first-child,
+    #produk-table td:first-child {
+        width: 40%;
+        min-width: 220px;
+        word-wrap: break-word;
+    }
+}
+
+</style>
 <div class="container mt-4">
     <div class="card shadow-sm p-4">
         <!-- Header -->
@@ -37,7 +48,7 @@
                 <label for="barcode" class="form-label">Scan Barcode</label>
                 <input type="text" id="barcode" class="form-control shadow-sm" placeholder="Masukkan atau scan barcode produk...">
             </div>
-            
+
 
             <!-- Tabel Produk -->
             <div class="table-responsive mt-3">
@@ -95,7 +106,7 @@
                                 <p>{{ $produk->nama }} ({{ $produk->kode }})</p>
                             </div>
                         @endif
-                    @endforeach                
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -163,36 +174,52 @@
         document.getElementById('search-produk').focus();
     });
 
-    document.getElementById('search-produk').addEventListener('input', function (e) {
-        var query = e.target.value.trim();
+    document.getElementById('search-produk').addEventListener('keyup', function (e) {
+        var query = e.target.value.trim().toLowerCase();
         var produkItems = document.querySelectorAll('.product-item');
-        var matchedItem = null;
 
         produkItems.forEach(function(item) {
             var productCode = item.getAttribute('data-kode').toLowerCase();
             var productName = item.querySelector('p').textContent.toLowerCase();
 
             if (productCode.includes(query) || productName.includes(query)) {
-                item.style.display = '';
-
-                if (/^\d+$/.test(query) && productCode === query) {
-                    matchedItem = item;
-                }
+                item.style.display = 'block';
             } else {
                 item.style.display = 'none';
             }
         });
-        if (matchedItem) {
-            matchedItem.click();
-            e.target.value = ''; 
-        }
     });
+
+    // document.getElementById('search-produk').addEventListener('input', function (e) {
+    //     var query = e.target.value.trim();
+    //     var produkItems = document.querySelectorAll('.product-item');
+    //     var matchedItem = null;
+
+    //     produkItems.forEach(function(item) {
+    //         var productCode = item.getAttribute('data-kode').toLowerCase();
+    //         var productName = item.querySelector('p').textContent.toLowerCase();
+
+    //         if (productCode.includes(query) || productName.includes(query)) {
+    //             item.style.display = '';
+
+    //             if (/^\d+$/.test(query) && productCode === query) {
+    //                 matchedItem = item;
+    //             }
+    //         } else {
+    //             item.style.display = 'none';
+    //         }
+    //     });
+    //     if (matchedItem) {
+    //         matchedItem.click();
+    //         e.target.value = '';
+    //     }
+    // });
 
     document.querySelectorAll('.product-item').forEach(function(item) {
         item.addEventListener('click', function () {
             var productId = item.getAttribute('data-id');
             var productPrice = item.getAttribute('data-harga');
-            var productStock = item.getAttribute('data-stok'); 
+            var productStock = item.getAttribute('data-stok');
             var productName = item.querySelector('p').textContent;
 
             var produkFields = document.getElementById('produk-table-body');
@@ -220,7 +247,7 @@
 
             produkFields.appendChild(newRow);
             updateTotalPrice();
-            bootstrap.Modal.getInstance(document.getElementById('produkModal')).hide(); 
+            bootstrap.Modal.getInstance(document.getElementById('produkModal')).hide();
         });
     });
 
@@ -281,7 +308,7 @@
 
             if (jumlah > stok) {
                 alert('Jumlah melebihi stok yang tersedia!');
-                e.target.value = stok; 
+                e.target.value = stok;
             }
             updateTotalPrice();
         }
