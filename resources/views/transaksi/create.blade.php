@@ -77,8 +77,22 @@
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="bayar" class="form-label">Bayar</label>
-                    <input type="number" name="bayar" class="form-control shadow-sm" id="bayar" placeholder="Masukkan jumlah bayar" required>
+                    <input type="text" name="bayar" class="form-control shadow-sm" id="bayar" placeholder="Masukkan jumlah bayar" required>
                 </div>
+                <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                        const bayarInput = document.getElementById("bayar");
+                        bayarInput.addEventListener("input", function (event) {
+                            let value = this.value.replace(/\./g, ""); 
+                            if (!isNaN(value) && value !== "") {
+                                this.value = new Intl.NumberFormat("id-ID").format(value);
+                            }
+                        });
+                        bayarInput.addEventListener("blur", function () {
+                            this.value = this.value.replace(/\./g, ""); 
+                        });
+                    });
+                </script>
             </div>
 
             <!-- Tombol Simpan -->
@@ -103,7 +117,7 @@
                     @foreach ($produks as $produk)
                         @if ($produk->stok > 0)
                             <div class="product-item" data-id="{{ $produk->id }}" data-harga="{{ $produk->harga_jual }}" data-kode="{{ $produk->kode }}" data-stok="{{ $produk->stok }}">
-                                <p>{{ $produk->nama }} ({{ $produk->kode }})</p>
+                                <p>{{ $produk->nama }} ({{ $produk->kode }}) -- {{ $produk->harga_jual }}</p>
                             </div>
                         @endif
                     @endforeach
